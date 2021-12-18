@@ -1,0 +1,34 @@
+﻿@model TicketBooking.Models.TheatreSelection
+
+@foreach (var result in Model.TheatreListByMovie)
+{
+    <li class="list-group-item py-5">
+        <div class="media">
+            <div class="media-body">
+                <div class="media-heading">
+                    <h5>Theatre Name : @result.TheatreName</h5>
+                </div>
+                <div>
+                    <div class="example">
+                        <div class="btn-list">
+                            @foreach (var timeSpan in Model.MovieTimes)
+                            {
+                                var dateTime = new DateTime(Model.SelectedDate.Year, Model.SelectedDate.Month, Model.SelectedDate.Day, timeSpan.MovieTime.Hours, 0, 0);
+
+                                if (dateTime > Model.SelectedDate)
+                                {
+                                    <a href="/TicketBooking/@result.MovieId/@result.TheatreId/@Model.CityId/@timeSpan.Id/@Model.SelectedDate.ToString("MM-dd-yyyy")" class="btn btn-square alert-success">@timeSpan.MovieTime.ToString()</a>
+                                }
+                                else
+                                {
+                                    <a href="#" class="btn btn-square btn-danger">@timeSpan.MovieTime.ToString()</a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+}
+

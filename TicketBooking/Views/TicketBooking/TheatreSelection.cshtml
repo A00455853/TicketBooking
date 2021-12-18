@@ -1,0 +1,66 @@
+﻿@model TicketBooking.Models.TheatreSelection
+@{
+    var theatreListByMovie = Model.TheatreListByMovie.FirstOrDefault();
+    var MovieImagePath = string.Empty;
+    var MovieName = string.Empty;
+    var cityId = Model.CityId;
+    if (theatreListByMovie != null)
+    {
+        MovieImagePath = theatreListByMovie.MovieImagePath;
+        MovieName = theatreListByMovie.MovieName;
+    }
+}
+
+<div class="page-header">
+    <h1 class="page-title">
+        Select Show
+    </h1>
+    <div class="page-subtitle"></div>
+    <div class="page-options d-flex">
+        <select class="form-control custom-select w-auto" id="ddlselecteddate" onchange="functionloadPartialView(this);">
+            <option value="@Model.SelectedDate.ToShortDateString()">@Model.SelectedDate.ToShortDateString()</option>
+            <option value="@Model.SelectedDate.AddDays(1).ToShortDateString()">@Model.SelectedDate.AddDays(1).ToShortDateString()</option>
+            <option value="@Model.SelectedDate.AddDays(2).ToShortDateString()">@Model.SelectedDate.AddDays(2).ToShortDateString()</option>
+        </select>
+    </div>
+</div>
+<input type="hidden" id="CityId" value="@cityId" />
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <a href="#"><img class="card-img-top" src="@MovieImagePath" alt="And this isn&#39;t my nose. This is a false one."></a>
+            <div class="card-body d-flex flex-column">
+
+                <div class="d-flex align-items-center pt-5 mt-auto">
+                    <div class="avatar avatar-md mr-3" style="background-image: url(./demo/faces/female/18.jpg)"></div>
+                    <div>
+                        <a href="javascript:void(0)" class="text-default">@MovieName</a>
+
+                    </div>
+                    <div class="ml-auto text-muted">
+                        <a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i class="fe fe-heart mr-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card">
+            <ul class="list-group card-list-group">
+                <div id="_PartialTheatreSelection">
+                    <Partial name="_PartialTheatreSelection" model="@Model"></Partial>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    var functionloadPartialView = function(obj)
+    {
+        var url="/PartialTheatreSelection/";
+                jQuery.post(url,{Id:jQuery('#CityId').val(),selectedDate:obj.value},function(data){
+            jQuery('#_PartialTheatreSelection').html(data);
+        });
+    }
+</script>
