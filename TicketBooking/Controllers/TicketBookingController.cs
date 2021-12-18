@@ -19,15 +19,7 @@ namespace TicketBooking.Controllers
             return View(city);
         }
 
-        [HttpGet("MovieSelection/{cityId}")]
--        public IActionResult MovieSelection(int cityId)
--        {
--            CityMovie cityMovie = new CityMovie();
--            cityMovie.lstCityMovie = this.cityRepository.GetCityMovie(cityId);
--            return View(cityMovie);
--        }
-
-    [HttpGet("TheatreSelection/{Id}")]
+        [HttpGet("TheatreSelection/{Id}")]
         public IActionResult TheatreSelection(int Id)
         {
             var theatreSelection = new TheatreSelection();
