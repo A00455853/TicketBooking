@@ -1,0 +1,25 @@
+﻿@model TicketBooking.Models.City
+@{
+}
+<div class="page-header">
+    <h1 class="page-title">
+        Select City
+    </h1>
+    <div class="page-subtitle"></div>
+    <div class="page-options d-flex">
+    </div>
+</div>
+<div class="row row-cards">
+    @foreach (var data in Model.Cities)
+    {
+        <div class="col-6 col-sm-4 col-lg-2">
+            <div class="card">
+                <div class="card-body p-3 text-center">
+                    <div class="text-muted mb-4">
+                        <a href="/MovieSelection/@data.Id" class="btn btn-green btn-block">@data.CityName</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
