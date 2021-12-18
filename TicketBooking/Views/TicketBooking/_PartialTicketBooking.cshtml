@@ -1,0 +1,69 @@
+﻿@model TicketBooking.Models.MovieBookingDetails
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped" id="table-screen">
+            @for (int i = 1; i < 16; i++)
+            {
+                <th>
+                    @i
+                </th>
+            }
+            @for (int i = 1; i < Model.TheatreBookedSeats.Count() / 15; i++)
+            {
+                <tr id="displayscreenTickets">
+                    @{
+                        var startIndex = ((i * 15) - 15) + 1;
+                    }
+
+                    @foreach (var theatreBookedSeats in Model.TheatreBookedSeats.Where(x => x.SeatId >= startIndex && x.SeatId < (startIndex + 15)))
+                    {
+                        <td><img src="@theatreBookedSeats.ImagePath" class="@theatreBookedSeats.ImageClass" id="@theatreBookedSeats.SeatId" onclick="bindSeat(this)"></td>
+                    }
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+<script>
+    var bindSeat = function(objSeat){
+
+        if($('#'+objSeat.id).hasClass("empty-seat")){
+
+          if(parseInt($('#TicketCount').val()) == $('.selected-seat').length)
+          {
+              alert("You can not book ticket more then " +$('#TicketCount').val()+ "")
+              return false;
+          }
+
+        $('#'+objSeat.id).removeClass("empty-seat");
+       $('#'+objSeat.id).addClass("selected-seat");
+       $('#'+objSeat.id).removeAttr("src");
+       $('#'+objSeat.id).attr("src","/img/selected.png");
+       SaveTickets();
+        }
+        else if ($('#'+objSeat.id).hasClass("selected-seat"))
+        {
+              $('#'+objSeat.id).removeClass("selected-seat");
+       $('#'+objSeat.id).addClass("empty-seat");
+        $('#'+objSeat.id).removeAttr("src");
+        $('#'+objSeat.id).attr("src","/img/available.png");
+        SaveTickets();
+        }
+
+        function SaveTickets()
+        {
+            $('#strTicketNumbers').val('');
+            $('#lblPrice').html('0')
+            var strTicketNumbers = '';
+            $(".selected-seat").each(function(index) {
+               strTicketNumbers += this.id+",";
+               $('#lblPrice').html(parseInt($('#lblPrice').html())+parseInt($('#TicketPrice').val()))
+            });
+            strTicketNumbers = strTicketNumbers.substring(0,strTicketNumbers.length-1);
+            $('#strTicketNumbers').val(strTicketNumbers);
+        }
+    }
+</script>
