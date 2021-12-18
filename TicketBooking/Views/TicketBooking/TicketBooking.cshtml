@@ -1,0 +1,147 @@
+﻿@model TicketBooking.Models.MovieBookingDetails
+@{
+
+}
+<form method="post" action="/TicketBooking" enctype="multipart/form-data">
+
+    @Html.HiddenFor(x=>x.CityId)
+    @Html.HiddenFor(x=>x.MovieId)
+    @Html.HiddenFor(x=>x.ShowTimeId)
+    @Html.HiddenFor(x=>x.TheatreId)
+    @Html.HiddenFor(x=>x.TicketCount)
+    @Html.HiddenFor(x=>x.strTicketNumbers)
+    @Html.HiddenFor(x=>x.TicketPrice)
+    @Html.HiddenFor(x=>x.SelectedDateTime)
+    @Html.HiddenFor(x=>x.ShowTime)
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Customer Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" asp-for="FirstName" required="true" class="form-control" min="3" onkeypress="return lettersOnly();">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" asp-for="LastName" required="true" class="form-control" min="3" onkeypress="return lettersOnly();">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"> Email</label>
+                        <input type="email" asp-for="CustomerEmailAddress" required="true" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mobile</label>
+                        <input type="tel" asp-for="CustomerMobile" maxlength="10" required="true" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Payment Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">Credit Card Type</label>
+                        <select asp-for="strCreditCardType" asp-items="Model.CreditCardType" class="form-control"></select>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" asp-for="CreditCardNumber" maxlength="16" required="true" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Month</label>
+                        <select asp-for="strMonth" asp-items="Model.ExpiryMonth" class="form-control"></select>
+                        <label class="form-label">Year</label>
+                        <select asp-for="strYear" asp-items="Model.ExpiryYear" class="form-control"></select>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="col-lg-8">
+
+            <div class="card-body">
+                <h3 class="card-title">Select Seat</h3>
+                <partial name="_PartialTicketBooking" model="@Model" />
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Price : </label>
+                    <label class="form-label" id="lblPrice">0</label>
+                </div>
+
+            </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-primary" onclick="return BookTicket()">Book Ticket</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    var masterCardStart = parseInt('5100000000000000');
+    var masterCardEnd   = parseInt('5599999999999999');
+
+    var VisaCardStart = parseInt('4000000000000000');
+    var VisaCardEnd   = parseInt('499999999999999');
+
+    var AmericanExpressCardStart = parseInt('3400000000000000');
+    var AmericanExpressCardEnd   = parseInt('3499999999999999');
+
+    var AmericanExpressCardStart2 = parseInt('3700000000000000');
+    var AmericanExpressCardEnd2   = parseInt('3799999999999999');
+        function lettersOnly()
+    {
+                var charCode = event.keyCode;
+
+                if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8)
+
+                    return true;
+                else
+                    return false;
+    }
+    function BookTicket()
+    {
+         if($('.selected-seat').length ==0)
+          {
+              alert("Please Select At Least One Ticket")
+              return false;
+          }
+
+          var creditCardNumber = parseInt($('#CreditCardNumber').val());
+          if(creditCardNumber != ''){
+           if($('#strCreditCardType').val() == '1')
+        {
+            if((creditCardNumber >= masterCardStart && creditCardNumber <=masterCardEnd) == false)
+            {
+                 alert("Please Enter Valid Card Details");
+                 return false;
+            }
+        }
+         if($('#strCreditCardType').val() == '2')
+        {
+             if((creditCardNumber >= VisaCardStart && creditCardNumber <= VisaCardEnd) == false)
+            {
+                 alert("Please Enter Valid Card Details");
+                 return false;
+            }
+        }
+         if($('#strCreditCardType').val() == '3')
+        {
+            if(((creditCardNumber >= AmericanExpressCardStart && creditCardNumber <= AmericanExpressCardEnd) ||(creditCardNumber >= AmericanExpressCardStart2 && creditCardNumber <= AmericanExpressCardEnd2)) == false)
+            {
+                 alert("Please Enter Valid Card  Details");
+                 return false;
+            }
+        }
+          }
+
+    }
+
+</script>

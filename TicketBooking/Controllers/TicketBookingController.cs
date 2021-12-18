@@ -63,7 +63,40 @@ namespace TicketBooking.Controllers
             return PartialView("_PartialTheatreSelection", theatreSelection);
         }
 
-        //TODO: Add control to allow user to Book Movie Ticket
-        //TODO: Add control to allow user to choose seats and complete the booking
+        
+        // Added control to allow user to choose seats and complete the booking
+
+        [HttpGet("TicketBooking/{MovieId}/{TheatreId}/{CityId}/{Id}/{SelectedDate}")]
+        public IActionResult TicketBooking(int MovieId, int TheatreId, int CityId, int Id, string SelectedDate)
+        {
+            MovieBookingDetails movieBookingDetails = this.cityRepository.GetMovieBookingDetails(MovieId, TheatreId, CityId, Id);
+            movieBookingDetails.MovieId = MovieId;
+            movieBookingDetails.TheatreId = TheatreId;
+            movieBookingDetails.CityId = CityId;
+            movieBookingDetails.ShowTimeId = Id;
+            movieBookingDetails.SelectedDateTime = new DateTime(Convert.ToDateTime(SelectedDate).Year, Convert.ToDateTime(SelectedDate).Month, Convert.ToDateTime(SelectedDate).Day, movieBookingDetails.ShowTime.Hours, 0, 0);
+            movieBookingDetails.TheatreBookedSeats = this.cityRepository.GetTheatreBookedSeats(MovieId, TheatreId, CityId, movieBookingDetails.SelectedDateTime);
+            return View(movieBookingDetails);
+        }
+
+
+
+        [HttpPost("TicketBooking")]
+
+        public IActionResult TicketBooking(MovieBookingDetails movieBookingDetails)
+        {
+            movieBookingDetails.CustomerName = movieBookingDetails.FirstName + " " + movieBookingDetails.LastName;
+            movieBookingDetails.ExpiryDate = movieBookingDetails.strMonth + "/" + movieBookingDetails.strYear;
+            var id = this.cityRepository.SaveMovieBooking(movieBookingDetails);
+            return RedirectToAction("MovieTicket", new { CustomerId = id });
+        }
+
+        [HttpGet("MovieTicket/{CustomerId}")]
+        public IActionResult MovieTicket(int CustomerId)
+        {
+            var movieDetails = this.cityRepository.GetMovieBookingDetails(CustomerId);
+            return View(movieDetails);
+        }
+
     }
 }
