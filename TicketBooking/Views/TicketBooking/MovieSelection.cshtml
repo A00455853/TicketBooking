@@ -1,0 +1,37 @@
+﻿@model TicketBooking.Models.CityMovie
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="page-header">
+    <h1 class="page-title">
+        Book Movie
+    </h1>
+
+
+</div>
+<div class="row row-cards">
+    @foreach (var list in Model.lstCityMovie)
+    {
+        <div class="col-sm-6 col-lg-4">
+            <div class="card p-3">
+                <a href="javascript:void(0)" class="mb-3">
+                    <img src="@list.MovieImagePath" alt="Photo by Nathan Guerrero" class="rounded">
+                </a>
+                <div class="d-flex align-items-center px-2">
+
+                    <div>
+                        <div>@list.MovieName</div>
+
+                    </div>
+                    <div class="ml-auto text-muted">
+                        <a href="/TheatreSelection/@list.Id" class="icon">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
