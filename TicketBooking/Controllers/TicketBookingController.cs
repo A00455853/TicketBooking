@@ -19,28 +19,15 @@ namespace TicketBooking.Controllers
             return View(city);
         }
 
-
         [HttpGet("MovieSelection/{cityId}")]
-        public IActionResult MovieSelection(int cityId)
-        {
-            CityMovie cityMovie = new CityMovie();
-            cityMovie.lstCityMovie = this.cityRepository.GetCityMovie(cityId);
-            return View(cityMovie);
-        }
+-        public IActionResult MovieSelection(int cityId)
+-        {
+-            CityMovie cityMovie = new CityMovie();
+-            cityMovie.lstCityMovie = this.cityRepository.GetCityMovie(cityId);
+-            return View(cityMovie);
+-        }
 
-        //adding control to handle Movie Selection based on city
-
-        [HttpGet("MovieSelection/{cityId}")]
-        public IActionResult MovieSelection(int cityId)
-        {
-            CityMovie cityMovie = new CityMovie();
-            cityMovie.lstCityMovie = this.cityRepository.GetCityMovie(cityId);
-            return View(cityMovie);
-        }
-
-        // adding control to handle Theatre Selection based on the selected movie
-
-        [HttpGet("TheatreSelection/{Id}")]
+    [HttpGet("TheatreSelection/{Id}")]
         public IActionResult TheatreSelection(int Id)
         {
             var theatreSelection = new TheatreSelection();
@@ -63,9 +50,6 @@ namespace TicketBooking.Controllers
             return PartialView("_PartialTheatreSelection", theatreSelection);
         }
 
-        
-        // Added control to allow user to choose seats and complete the booking
-
         [HttpGet("TicketBooking/{MovieId}/{TheatreId}/{CityId}/{Id}/{SelectedDate}")]
         public IActionResult TicketBooking(int MovieId, int TheatreId, int CityId, int Id, string SelectedDate)
         {
@@ -79,7 +63,13 @@ namespace TicketBooking.Controllers
             return View(movieBookingDetails);
         }
 
-
+        [HttpGet("MovieSelection/{cityId}")]
+        public IActionResult MovieSelection(int cityId)
+        {
+            CityMovie cityMovie = new CityMovie();
+            cityMovie.lstCityMovie = this.cityRepository.GetCityMovie(cityId);
+            return View(cityMovie);
+        }
 
         [HttpPost("TicketBooking")]
 
@@ -97,6 +87,5 @@ namespace TicketBooking.Controllers
             var movieDetails = this.cityRepository.GetMovieBookingDetails(CustomerId);
             return View(movieDetails);
         }
-
     }
 }
